@@ -6,7 +6,8 @@
 # 
 # $ backup perform -t <%= @name %> [-c <path_to_configuration_file>]
 #
-Backup::Model.new(:<%= @name %>, '<%= @description %>') do
+#Backup::Model.new(:<%= @name %>, '<%= @description %>') do
+Backup::Model.new(:pg, '<%= @description %>') do
 
 ##
 # Split [Splitter]
@@ -27,9 +28,19 @@ split_into_chunks_of <%= @split_into_chunks_of %>
   # Gzip [Compressor]
   #
   compress_with Gzip
+  
   <% if @backup_type == "database" %>
+    <% @database_names.each do |n| %>
+  database <%= @database_type %>, :<%= n %> do |db|
+    db.name = "<%= n %>"
+      <% @options.each_pair do |k,v| %>
+    <%= k %> = <%= v %>
+      <% end %>
+  end
+    <% end %>
+  <% elsif @backup_type == "database" and @database_names.nil? %>
   database <%= @database_type %> do |db|
-  <% @options.each_pair do |k,v| %>
+    <% @options.each_pair do |k,v| %>
     <%= k %> = <%= v %>
     <% end %>
   end

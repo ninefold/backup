@@ -6,6 +6,7 @@ attribute :split_into_chunks_of, :kind_of => Fixnum, :default => 250
 attribute :description, :kind_of => String, :default => nil
 attribute :backup_type, :kind_of => String, :default => "database"
 attribute :database_type, :kind_of => String, :default => nil
+attribute :database_names, :kind_of => Array, :default => nil
 attribute :store_with, :kind_of => Hash
 attribute :hour, :kind_of => String, :default => "1"
 attribute :minute, :kind_of => String, :default => "*"

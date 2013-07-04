@@ -62,6 +62,7 @@ Attribute Parameters:
 * `backup_type` - String - Type of backup to perform.  Current options supported are `{database|archive}`  
 * `store_with` - Hash - Specifies how to store the backups  
 * `database_type` - String - If backing up a database, what [Type](https://github.com/meskyanichi/backup/wiki/Databases) of database is being backed up.    
+* `database_names` - Array of database name allowing for multiple individual databases to be backed up within one model 
 * `hour` - String - Hour to run the scheduled backup - default - `1`  
 * `minute` - String - Minute to run the scheduled backup - default - `*`  
 * `day` - String - Day to run the scheduled backup - default - `*`  
@@ -124,6 +125,7 @@ There are infinite ways you can implement this cookbook into your environment in
     description "backup of postgres"
     backup_type "database"
     database_type "PostgreSQL"
+    database_name "application"
     split_into_chunks_of 2048
     store_with({
       "engine" => "S3",
@@ -136,7 +138,7 @@ There are infinite ways you can implement this cookbook into your environment in
         "s3.keep" => 10 } 
     })
   options({
-    "db.name" => "\"postgres\"",
+    "db.name" => "\"application\"",
     "db.username" => "\"postgres\"",
     "db.password" => "\"somepassword\"",
     "db.host" => "\"localhost\"" })
