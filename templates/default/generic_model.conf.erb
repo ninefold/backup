@@ -21,43 +21,44 @@ split_into_chunks_of <%= @split_into_chunks_of %>
   store_with <%= @store_with["engine"] %> do |<%= @store_with["engine"].downcase %>|
   <% @store_with["settings"].each_pair do |k,v| %>
     <%= k %> = "<%= v %>"
-    <% end %>
+  <% end %>
   end
 <% end %>
-  ##
-  # Gzip [Compressor]
-  #
-  compress_with Gzip
+
+# Gzip [Compressor]
+compress_with Gzip
   
-  <% if @backup_type == "database" %>
-    <% @database_names.each do |n| %>
-  database <%= @database_type %>, :<%= n %> do |db|
-    db.name = "<%= n %>"
-      <% @options.each_pair do |k,v| %>
-    <%= k %> = <%= v %>
-      <% end %>
-  end
-    <% end %>
-  <% elsif @backup_type == "database" and @database_names.nil? %>
-  database <%= @database_type %> do |db|
+<% if @backup_type == "database" %>
+  <% unless @database_names %>
+    database <%= @database_type %> do |db|
     <% @options.each_pair do |k,v| %>
-    <%= k %> = <%= v %>
+      <%= k %> = <%= v %>
     <% end %>
-  end
+    end
+  <% else %>
+    <% @database_names.each do |n| %>
+      database <%= @database_type %>, :<%= n %> do |db|
+      db.name = "<%= n %>"
+      <% @options.each_pair do |k,v| %>
+        <%= k %> = <%= v %>
+      <% end %>
+      end
+    <% end %>
   <% end %>
-  <% if @backup_type == "archive" %>
+<% end %>
+<% if @backup_type == "archive" %>
   archive :<%= @name %> do |archive|
   <% @options["add"].each do |v| %>
     archive.add '<%= v %>'
   <% end %>
   <% if @options["exclude"] %>
     <% @options["exclude"].each do |v| %>
-    archive.exclude '<%= v %>'
+      archive.exclude '<%= v %>'
     <% end %>
   <% end %>
-    <% if @options["tar_options"] %>
+  <% if @options["tar_options"] %>
     archive.tar_options '<%= @options["tar_options"] %>'
-    <% end %>
+  <% end %>
   end
 <% end %>
 end
