@@ -31,7 +31,7 @@ end
 
 action :disable do
   cron "scheduled backup: " + new_resource.name do
-    action :remove
+    action :delete
   end
   new_resource.updated_by_last_action(true)
 end
@@ -41,7 +41,7 @@ action :remove do
     action :remove
   end
   cron "scheduled backup: " + new_resource.name do
-    action :remove
+    action :delete
   end
   new_resource.updated_by_last_action(true)
 end
