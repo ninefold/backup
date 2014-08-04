@@ -50,6 +50,33 @@ backup_generate_model "pg" do
   action :backup
 end
 
+# with fog options
+backup_generate_model "pg" do
+  description "backup of postgres"
+  backup_type "database"
+  database_type "PostgreSQL"
+  split_into_chunks_of 2048
+  store_with({
+    "engine" => "S3",
+    "settings" => {
+      "s3.access_key_id" => "sample",
+      "s3.secret_access_key" => "sample",
+      "s3.region" => "us-east-1",
+      "s3.bucket" => "sample",
+      "s3.path" => "/",
+      "s3.keep" => 10 },
+    "fog_options" => {
+      "s3.session_token" => "somerediculouslylargeencryptedtoken"}
+  })
+  options({
+    "db.name" => "\"postgres\"",
+    "db.username" => "\"postgres\"",
+    "db.password" => "\"korma\"",
+    "db.host" => "\"localhost\"" })
+  mailto "sample@example.com"
+  action :backup
+end
+
 backup_generate_model "mongodb" do
   description "something"
   backup_type "database"

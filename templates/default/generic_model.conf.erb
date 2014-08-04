@@ -21,6 +21,13 @@ split_into_chunks_of <%= @split_into_chunks_of %>
   <% @store_with["settings"].each_pair do |k,v| %>
     <%= k %> = "<%= v %>"
   <% end %>
+  <% if @store_with["fog_options"] %>
+    <%= @store_with["engine"].downcase %>.fog_options = {
+    <% @store_with["fog_options"].each_pair do |k,v| %>
+      :<%= k %> => "<%= v %>"
+    <% end %>
+    }
+  <% end %>
   end
 <% end %>
 
